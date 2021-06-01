@@ -21,11 +21,12 @@ def scrape(
     except:
         return None
 
+    data = {}
+
     if (
         soup.findAll("span", attrs={"_ngcontent-app-root-c173": ""})[21].text
         == "Online"
     ):
-        data = {}
 
         # Last updated value
         data["LAST_UPDATED"] = soup.findAll(
@@ -66,54 +67,54 @@ def scrape(
 
         # Get Wind Speed
         if "windSpeed" in station["parameters"]:
-            data["wind_speed"] = soup.findAll("span", attrs={"class": "wu-value"})
-            data["wind_speed"] = round(float(data["wind_speed"][2].text), 1)
+            data["windSpeed"] = soup.findAll("span", attrs={"class": "wu-value"})
+            data["windSpeed"] = round(float(data["windSpeed"][2].text), 1)
 
             if units["speed"] == "kmph":
-                data["wind_speed"] = round(data["wind_speed"] * 1.6, 1)
+                data["windSpeed"] = round(data["windSpeed"] * 1.6, 1)
 
             elif units["speed"] == "mps":
-                data["wind_speed"] = round(data["wind_speed"] * (4 / 9), 1)
+                data["windSpeed"] = round(data["windSpeed"] * (4 / 9), 1)
 
         # Get Wind Gust
         if "windGust" in station["parameters"]:
-            data["wind_gust"] = soup.findAll("span", attrs={"class": "wu-value"})
-            data["wind_gust"] = round(float(data["wind_gust"][3].text), 1)
+            data["windGust"] = soup.findAll("span", attrs={"class": "wu-value"})
+            data["windGust"] = round(float(data["windGust"][3].text), 1)
 
             if units["speed"] == "kmph":
-                data["wind_gust"] = round(data["wind_gust"] * 1.6, 1)
+                data["windGust"] = round(data["windGust"] * 1.6, 1)
 
             elif units["speed"] == "mps":
-                data["wind_gust"] = round(data["wind_gust"] * (4 / 9), 1)
+                data["windGust"] = round(data["windGust"] * (4 / 9), 1)
 
         # Get Wind Bearing
         if "windBearing" in station["parameters"]:
-            data["wind_bearing"] = soup.find("div", attrs={"class": "arrow-wrapper"})
+            data["windBearing"] = soup.find("div", attrs={"class": "arrow-wrapper"})
 
-            string_full = ((data["wind_bearing"]["style"]).split())[1]
+            string_full = ((data["windBearing"]["style"]).split())[1]
             string_start = string_full[0:7]
             string_end = string_full[-5:-1]
 
             if (string_start == "rotate(") and (string_end == "deg)"):
-                data["wind_bearing"] = int(string_full[7:-5]) - 180
+                data["windBearing"] = int(string_full[7:-5]) - 180
             else:
-                data["wind_bearing"] = None
+                data["windBearing"] = None
 
         # Get Precipitation Rate
         if "precipRate" in station["parameters"]:
-            data["precip_rate"] = soup.findAll("span", attrs={"class": "wu-value"})
-            data["precip_rate"] = round(float(data["precip_rate"][5].text), 2)
+            data["precipRate"] = soup.findAll("span", attrs={"class": "wu-value"})
+            data["precipRate"] = round(float(data["precipRate"][5].text), 2)
 
             if units["precip"] == "mm":
-                data["precip_rate"] = round(data["precip_rate"] * 25.4, 2)
+                data["precipRate"] = round(data["precipRate"] * 25.4, 2)
 
         # Get Precipitation Total
         if "precipTotal" in station["parameters"]:
-            data["precip_total"] = soup.findAll("span", attrs={"class": "wu-value"})
-            data["precip_total"] = round(float(data["precip_total"][8].text), 2)
+            data["precipTotal"] = soup.findAll("span", attrs={"class": "wu-value"})
+            data["precipTotal"] = round(float(data["precipTotal"][8].text), 2)
 
             if units["precip"] == "mm":
-                data["precip_total"] = round(data["precip_total"] * 25.4, 2)
+                data["precipTotal"] = round(data["precipTotal"] * 25.4, 2)
 
         # Get Pressure
         if "pressure" in station["parameters"]:
@@ -130,8 +131,8 @@ def scrape(
 
         # Get UV Index
         if "uvIndex" in station["parameters"]:
-            data["uv_index"] = soup.findAll("span", attrs={"class": "wu-value"})
-            data["uv_index"] = round(float(data["uv_index"][9].text))
+            data["uvIndex"] = soup.findAll("span", attrs={"class": "wu-value"})
+            data["uvIndex"] = round(float(data["uvIndex"][9].text))
 
         # Get Solar Radiation
         if "radiation" in station["parameters"]:
